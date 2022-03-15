@@ -42,6 +42,7 @@ class SampleDecoder {
 		double valorTotalIptu = 0.0;
 
 	public:
+
 		SampleDecoder(string _fileName);
 		~SampleDecoder();
 
