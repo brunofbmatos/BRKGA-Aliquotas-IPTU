@@ -151,9 +151,9 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 // Runs in \Theta(n \log n): // Exemplo consultado em brkga API
 double SampleDecoder::decode(std::vector< double >& chromosome) const {
 	double myFitness = 0.0;
+	myFitness = construirSolucao(chromosome);
 	cout<<"IPTU Total: "<<valorTotalIptu<<endl;
 	cout<<"Fitness: "<<myFitness<<endl;
-	myFitness = construirSolucao(chromosome);
 	if(myFitness < valorTotalIptu)
 	{
 		myFitness = myFitness * -1;
