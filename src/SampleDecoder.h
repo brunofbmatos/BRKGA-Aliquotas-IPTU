@@ -39,7 +39,7 @@ class SampleDecoder {
 		vector<int> listaNumero;
 		vector<double> listaValorVenal, listaValorIptu;
 		int k,readerInt;
-		double valorTotalIptu = 0.0;
+		double valorTotalIptu = 0.0;	
 
 	public:
 
@@ -54,7 +54,7 @@ class SampleDecoder {
 		double construirSolucao(std::vector< double > &chromosome) const;
 
 		double decode(std::vector< double >& chromosome) const;
-
+		
 };
 
 #endif
