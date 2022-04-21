@@ -24,22 +24,34 @@
 #include <fstream>
 #include "SampleDecoder.h"
 
-//#include "Population.h"
+#include "MTRand.h"
+
+// #include "Population.h"
 
 using namespace std;
 
 class SampleDecoder {
 	private:
 		fstream dataFileRead;
-		string fileName;
-		double seed, readerDouble;
 		ifstream arquivo;
+
+		string fileName;
 		string Buffer, linha, tmp;
+
+		double seed, readerDouble;
+		double valorTotalIptu = 0.0;
+		const long unsigned rngSeed = 0;
+	    // MTRand rng;
+
+		int k, readerInt;
+		int quantidadeAliquotas, quantidadeDadosIPTU;
+
 		vector<string> listSetInstances;
-		vector<int> listaNumero;
+		vector<double> listaNumero; // vector<int> listaNumero;
 		vector<double> listaValorVenal, listaValorIptu;
-		int k,readerInt;
-		double valorTotalIptu = 0.0;	
+		vector< vector<double> > tabelaDados;
+		
+		
 
 	public:
 
@@ -54,6 +66,8 @@ class SampleDecoder {
 		double construirSolucao(std::vector< double > &chromosome) const;
 
 		double decode(std::vector< double >& chromosome) const;
+
+		void printMatrix(vector< vector<double> > _matrix);
 		
 };
 

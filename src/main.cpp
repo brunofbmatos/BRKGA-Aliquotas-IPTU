@@ -18,12 +18,13 @@
 #include "SampleDecoder.h"
 #include "MTRand.h"
 #include "BRKGA.h"
+#include <iomanip>
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
 
-    const unsigned p = 10;     // size of population //*** Antes era 200 o valor desse parâmetro
+    const unsigned p = 200;     // size of population //*** Antes era 200 o valor desse parâmetro
     const double pe = 0.20;     // fraction of population to be the elite-set
     const double pm = 0.10;     // fraction of population to be replaced by mutants
     const double rhoe = 0.70;   // probability that offspring inherit an allele from elite parent
@@ -32,10 +33,10 @@ int main(int argc, char* argv[]) {
 
     const unsigned X_INTVL = 100;   // exchange best individuals at every 100 generations
     const unsigned X_NUMBER = 2;    // exchange top 2 best
-    const unsigned MAX_GENS = 10; // run for 1000 gens   //***Antes era 1000
+    const unsigned MAX_GENS = 1000; // run for 1000 gens   //***Antes era 1000
 
-    //const long unsigned rngSeed = 0;    // seed to the random number generator
-    //MTRand rng(rngSeed);                // initialize the random number generator
+    // const long unsigned rngSeed = 0;    // seed to the random number generator
+    // MTRand rng(rngSeed);                // initialize the random number generator
 
     ifstream filaNomeArquivos;
     ofstream dataFileWrite;
@@ -48,7 +49,8 @@ int main(int argc, char* argv[]) {
 
 	vector<double> maxCromossomo, minCromossomo;
 
-    int iterSemMelhora, iterMax= 10;
+    int iterSemMelhora = 0, iterMax= 0;
+	double ValorTotalIPTU = 0.0;
 
 	// Utility utilities;
 
@@ -67,7 +69,7 @@ int main(int argc, char* argv[]) {
 	    // initialize the BRKGA-based heuristic
 	    BRKGA< SampleDecoder, MTRand > algorithm(n, p, pe, pm, rhoe, decoder, rng, K, MAXT);
 
-	    TempoFO_StarInic= clock();
+	    TempoFO_StarInic = clock();
 
 
 		FO_Star = DBL_MAX;
@@ -75,7 +77,9 @@ int main(int argc, char* argv[]) {
 		bestGeneration = 0;
 		minGeneration= 0;
 
-		//Aqui!!! iterSemMelhora= 0;
+		//Aqui!!! 
+		        iterSemMelhora= 0;
+				iterMax= 1;
 
 				unsigned generation = 0;        // current generation
 				do {
@@ -94,7 +98,7 @@ int main(int argc, char* argv[]) {
 							TempoFO_Star = (((double) (clock() - TempoFO_StarInic))/ CLOCKS_PER_SEC);
 							FO_Star = algorithm.getBestFitness();
 							bestGeneration = generation;
-							// maxCromossomo= algorithm.getBestChromosome();
+							//maxCromossomo= algorithm.getBestChromosome();
 
 							iterSemMelhora= 0;
 						}
@@ -105,11 +109,15 @@ int main(int argc, char* argv[]) {
 				} while (iterSemMelhora<iterMax);
 
 
-			TempoExecTotal = (((double) (clock() - TempoFO_StarInic))/ CLOCKS_PER_SEC);
+				TempoExecTotal = (((double) (clock() - TempoFO_StarInic))/ CLOCKS_PER_SEC);
 
 
-			cout<<"FO_Star: "<<FO_Star<<endl;
 
+			//cout<<"FO_Star: "<<std::setprecision(21)<<FO_Star<<endl;
+			//cout<<"Valor total IPTU: "<<std::setprecision(21)<<FO_Star<<endl;
+			//cout<<"Tempo de execução: "<<TempoExecTotal<<endl;
+// valor total iptu
+//tempo de execução 
 			decoder.cleanMemory();
 
 
