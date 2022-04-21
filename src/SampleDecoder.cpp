@@ -158,17 +158,19 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 	// theta2 deve ser maior ou igual a 0.26670 e menor ou igual a 0.62230
 	if ( (theta2 >= 0.26670) && (theta2 <= 0.62230) ) {
 		//cout<<"Entrou if de theta2"<<endl;
-        interval = 62230 - 26670;
+	}
+	else 
+	{
+		interval = 62230 - 26670;
 		randomValue = rng.randInt(interval);
 		randomValueDouble = 26670 + randomValue;
 		randomValueDouble = randomValueDouble/100000.0;
 		theta2 = randomValueDouble;
 		chromosome[2] = randomValueDouble;
-
 	}
 
 	// X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
-	if ( (Xi >= 0.10) && (Xi <= 0.20)) {
+	if ( (Xi > 0.09) && (Xi < 0.21)) {
 		//cout<<"Entrou if de Xi"<<endl;
 		Xi = Xi /100.0;
 	}
