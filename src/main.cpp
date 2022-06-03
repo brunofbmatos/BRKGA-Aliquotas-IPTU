@@ -24,7 +24,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-    const unsigned p = 200;     // size of population //*** Antes era 200 o valor desse parâmetro
+    const unsigned p = 10;     // size of population //*** Antes era 200 o valor desse parâmetro
     const double pe = 0.20;     // fraction of population to be the elite-set
     const double pm = 0.10;     // fraction of population to be replaced by mutants
     const double rhoe = 0.70;   // probability that offspring inherit an allele from elite parent
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 
     const unsigned X_INTVL = 100;   // exchange best individuals at every 100 generations
     const unsigned X_NUMBER = 2;    // exchange top 2 best
-    const unsigned MAX_GENS = 1000; // run for 1000 gens   //***Antes era 1000
+    const unsigned MAX_GENS = 2; // run for 1000 gens   //***Antes era 1000
 
     // const long unsigned rngSeed = 0;    // seed to the random number generator
     // MTRand rng(rngSeed);                // initialize the random number generator

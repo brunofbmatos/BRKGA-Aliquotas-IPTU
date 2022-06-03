@@ -42,13 +42,13 @@ SampleDecoder::SampleDecoder(string _fileName) {
 
   	dataFileRead.open( fileName.c_str(), fstream::in);
 
-	cout<<"Passou pela abertura!!!"<<endl;
+	//cout<<"Passou pela abertura!!!"<<endl;
 
   	if(dataFileRead.is_open()){
   	  dataFileRead.seekg(0, ios::beg);
   	  //Aqui!!! cout<<"Operation successfully performed Aqui!!!"<<endl;
   	} else{
-  	    cout<<"Não foi possivel abrir o arquivo!"<<endl;
+  	    //cout<<"Não foi possivel abrir o arquivo!"<<endl;
   	    dataFileRead.clear();
   	    exit(1);
   	}
@@ -79,7 +79,7 @@ SampleDecoder::SampleDecoder(string _fileName) {
 	dataFileRead.clear();
 	dataFileRead.close();
 
-	printMatrix(tabelaDados);
+	//printMatrix(tabelaDados);
 
   seed = 1480813184;
 
@@ -127,25 +127,22 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 	theta1 = chromosome[1]; // theta1 deve ser maior ou igual a 0.00042 e menor ou igual a 0.00098
 	theta2 = chromosome[2]; // theta2 deve ser maior ou igual a 0.26670 e menor ou igual a 0.62230
 
-	cout<<"\n\n\n=== Construir Solucao ==="<<endl;
+	//cout<<"\n\n\n=== Construir Solucao ==="<<endl;
 
-	cout<<"EulerConstant = "<<EulerConstant<<endl;
+	//cout<<"EulerConstant = "<<EulerConstant<<endl;
 
-	cout<<"Valores originais"<<endl;
-	cout<<"theta1 = "<<theta1<<endl;
-	cout<<"theta2 = "<<theta2<<endl;
-	cout<<"Xi = "<<Xi<<endl;
+	//cout<<"Valores originais"<<endl;
+	cout<<theta1<<";"<<theta2<<";"<<Xi<<endl;
 
 
     // theta1 deve ser maior ou igual a 0.00042 e menor ou igual a 0.00098
 	if ( (theta1 >= 0.42) && (theta1 <= 0.98) ) {
-		cout<<"Entrou if de theta1"<<endl;
+		//cout<<"Entrou if de theta1"<<endl;
 		theta1 = theta1/1000.0;
 	}
 	else 
 	{
-
-		cout<<"Entrou else de theta1"<<endl;
+		//cout<<"Entrou else de theta1"<<endl;
 		interval = 98 - 42;
 		randomValue = rng.randInt(interval);
 		randomValueDouble = 42 + randomValue;
@@ -157,7 +154,7 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 	
 	// theta2 deve ser maior ou igual a 0.26670 e menor ou igual a 0.62230
 	if ( (theta2 >= 0.26670) && (theta2 <= 0.62230) ) {
-		cout<<"Entrou if de theta2"<<endl;
+		//cout<<"Entrou if de theta2"<<endl;
 	}
 	else 
 	{
@@ -171,13 +168,13 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 
 	// X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
 	if ( (Xi == 1) && (Xi <= 1)) {
-		cout<<"Entrou if de Xi"<<endl;
+		//cout<<"Entrou if de Xi"<<endl;
 		Xi = 1;
 		chromosome[0] = 1;
 	}
 	else
 	{        
-		cout<<"Entrou else de  Xi"<<endl;
+		//cout<<"Entrou else de  Xi"<<endl;
  		//interval = 1;
 		//randomValue = rng.randInt(interval);
 		chromosome[0] = 1; //randomValueDouble;
@@ -191,7 +188,7 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
     //cout<<"Depois do IF que recalcula X1"<<endl;
     //cout<<"theta1 = "<<theta1<<endl;
 	//cout<<"theta2 = "<<theta2<<endl;
-	cout<<"Xi = "<<Xi<<endl;
+	//cout<<"Xi = "<<Xi<<endl;
 	//listaAliquotas[ 0 ] = Xi;
 	//cout<<"X1= "<<listaAliquotas[ 0 ]<<endl;
 
@@ -200,7 +197,7 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 	//	listaAliquotas[ 0 ] = Xi;
 	//}	
 	if ( (listaAliquotas[ 0 ] <= 0.0010) && (listaAliquotas[ 0 ] >= 0.0020)) {
-		cout<<"X1 não atende"<<endl;
+		//cout<<"X1 não atende"<<endl;
 		listaAliquotas[ 0 ] = Xi;
 		interval = 20 - 10;
 		randomValue = rng.randInt(interval);
@@ -214,40 +211,33 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 		{
 			listaAliquotas[ 0 ] = interval/1000.0;
 		}	
-		cout<<"X1" <<" = "<<listaAliquotas[0]<<endl;
+		//cout<<"X1" <<" = "<<listaAliquotas[0]<<endl;
     }
 	 
-
-
-	cout<<"=== Aliquotas ==="<<endl;
-	cout<<"X1 = "<<listaAliquotas[ 0 ]<<endl;
+	//cout<<"=== Aliquotas ==="<<endl;
+	//cout<<"X1 = "<<listaAliquotas[ 0 ]<<endl;
 	for(int i=1; i < quantidadeAliquotas; i++) {
 		listaAliquotas[i] = listaAliquotas[ i-1 ] * pow( EulerConstant,  theta2 * Xi);
-		cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+		//cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
 	}
 
 	if ( listaAliquotas[ quantidadeAliquotas -1 ] > 0.0140 ) {
 		// X8 deve ser menor ou igual a 0.0140
-		cout<<"X8 maior que 0.0140"<<endl;
+		//cout<<"X8 maior que 0.0140"<<endl;
 		interval = 14;
-		randomValue = rng.randInt(interval);
-		randomValueDouble = randomValue;
-		randomValueDouble = randomValueDouble/1000.0;
-		if(randomValueDouble > listaAliquotas[ quantidadeAliquotas -2 ] )
+		//randomValue = rng.randInt(interval);
+		//randomValueDouble = randomValue;
+		//randomValueDouble = randomValueDouble/1000.0;
+		if(interval/1000.0 > listaAliquotas[ quantidadeAliquotas -2 ] )
 		{
-			listaAliquotas[ quantidadeAliquotas -1 ] = randomValueDouble;
+			listaAliquotas[ quantidadeAliquotas -1 ] = interval/1000.0;
 		}
 		else 
 		{
 			listaAliquotas[ quantidadeAliquotas -1 ] = interval/1000.0;
 		}	
-		cout<<"X"<<quantidadeAliquotas <<" = "<<listaAliquotas[quantidadeAliquotas -1]<<endl;
+		//cout<<"X"<<quantidadeAliquotas <<" = "<<listaAliquotas[quantidadeAliquotas -1]<<endl;
 	}
-		
-	
-	
-
-	
 	
 	for(int i=0; i<listaValorVenal.size(); i++) {
 		fitness = fitness + ( listaValorVenal[ i ] * listaAliquotas[ i ] );
@@ -255,12 +245,10 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 
 
 
-	cout<<"\n=== Dados ==="<<endl;
-	cout<<"theta1 = "<<theta1<<endl;
-	cout<<"theta2 = "<<theta2<<endl;
-	cout<<"Xi = "<<Xi<<endl;
+	//cout<<"\n=== Dados ==="<<endl;
+	cout<<";"<<theta1<<";"<<theta2<<";"<<Xi<<endl;
 	for(int i=0; i < quantidadeAliquotas; i++) {
-		cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+		cout<<";"<<listaAliquotas[i];
 	}
 
 	/*
@@ -276,8 +264,7 @@ double SampleDecoder::decode(std::vector< double >& chromosome) const {
 	double penalidade = valorTotalIptu*0.15; // Penalidade de 15% relativo ao valor total do IPTU
 	myFitness = construirSolucao(chromosome);
 
-	cout<<"IPTU Total: "<<std::setprecision(21)<<valorTotalIptu<<endl;
-	cout<<"Fitness: "<<std::setprecision(21)<<myFitness<<endl;
+	cout<<";"<<std::setprecision(21)<<valorTotalIptu<<";"<<std::setprecision(21)<<myFitness<<endl;
 	
 	if (myFitness < valorTotalIptu) {
 	 	myFitness = myFitness - penalidade;
