@@ -65,4 +65,5 @@ struct TimeTableBandwidthRate{
  int timeTable[4][11];
 };
 
+
 #endif /* STRUCTURES_H_ */

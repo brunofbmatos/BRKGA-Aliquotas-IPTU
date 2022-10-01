@@ -18,13 +18,14 @@
 #include "SampleDecoder.h"
 #include <iomanip>
 #include <stdlib.h>
-
+#include "Structures.h"
+#include "Utility.h"
+#include "MTRand.h"
 
 #define _USE_MATH_DEFINES
  
 #include <cmath>
 
-#include "MTRand.h"
 
 const double EulerConstant = std::exp(1.0);
 
@@ -82,6 +83,7 @@ SampleDecoder::SampleDecoder(string _fileName) {
 	//printMatrix(tabelaDados);
 
   seed = 1480813184;
+  
 
 }
 
@@ -108,20 +110,15 @@ void SampleDecoder::printMatrix(vector< vector<double> > _matrix) {
 
 }
 
-
 // double SampleDecoder::construirSolucao(std::vector< double > &chromosome,vector< unsigned > &permutation) const
-double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const {
+double SampleDecoder::construirSolucao(bool &verificacao, std::vector< double > &chromosome) const {
 	double fitness = 0, valortotalvenal, readleDouble = 0;
 	double theta1, theta2; // parâmetros usados pelos modelo e obtidos pela leitura do cromossomo
 	double Xi; 
 	double listaAliquotas[quantidadeAliquotas];
-
 	// randInt( const uint32 n ); // integer in [0,n] for n < 2^32
 	int randomValue, interval;
 	double randomValueDouble;
-
-	const long unsigned rngSeed = 0; // seed to the random number generator
-	MTRand rng(rngSeed);
 
 	Xi = chromosome[0];
 	theta1 = chromosome[1]; // theta1 deve ser maior ou igual a 0.00042 e menor ou igual a 0.00098
@@ -132,147 +129,294 @@ double SampleDecoder::construirSolucao(std::vector< double > &chromosome) const 
 	//cout<<"EulerConstant = "<<EulerConstant<<endl;
 
 	//cout<<"Valores originais"<<endl;
-	cout<<theta1<<";"<<theta2<<";"<<Xi<<endl;
+	//cout<<theta1<<";"<<theta2<<";"<<Xi<<endl;
 
 
     // theta1 deve ser maior ou igual a 0.00042 e menor ou igual a 0.00098
 	if ( (theta1 >= 0.42) && (theta1 <= 0.98) ) {
 		//cout<<"Entrou if de theta1"<<endl;
 		theta1 = theta1/1000.0;
-	}
-	else 
-	{
-		//cout<<"Entrou else de theta1"<<endl;
-		interval = 98 - 42;
-		randomValue = rng.randInt(interval);
-		randomValueDouble = 42 + randomValue;
-		randomValueDouble = randomValueDouble/100.0;
-		chromosome[1] = randomValueDouble; // checar como se faz
-		randomValueDouble = randomValueDouble/1000.0;
-		theta1 = randomValueDouble;
+	} else if (theta1 < 0.42) {
+			theta1 = 0.42/1000.0;
+	} else if (theta1 > 0.98) {
+			theta1 = 0.98/1000.0;
 	}
 	
+	
 	// theta2 deve ser maior ou igual a 0.26670 e menor ou igual a 0.62230
-	if ( (theta2 >= 0.26670) && (theta2 <= 0.62230) ) {
-		//cout<<"Entrou if de theta2"<<endl;
-	}
-	else 
-	{
-		interval = 62230 - 26670;
-		randomValue = rng.randInt(interval);
-		randomValueDouble = 26670 + randomValue;
-		randomValueDouble = randomValueDouble/100000.0;
-		theta2 = randomValueDouble;
-		chromosome[2] = randomValueDouble;
+	if (theta2 < 0.26670) {
+		theta2 = 0.26670;
+	} else if (theta2 > 0.62230) {
+			theta2 = 0.62230;
 	}
 
+
 	// X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
-	if ( (Xi == 1) && (Xi <= 1)) {
-		//cout<<"Entrou if de Xi"<<endl;
-		Xi = 1;
-		chromosome[0] = 1;
-	}
-	else
-	{        
-		//cout<<"Entrou else de  Xi"<<endl;
- 		//interval = 1;
-		//randomValue = rng.randInt(interval);
-		chromosome[0] = 1; //randomValueDouble;
-		//Xi = randomValueDouble;
-		Xi = 1;
-	}	
+	// if ( (Xi == 1) && (Xi <= 1)) {
+	// 	Xi = 1;
+	// } else {        
+	// 	Xi = 1;
+	// }	
+
+	// Aqui!!! Xi = 1;
 
 	// X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
 	listaAliquotas[ 0 ] = theta1 * pow(EulerConstant, theta2 * Xi); // X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
 
-    //cout<<"Depois do IF que recalcula X1"<<endl;
-    //cout<<"theta1 = "<<theta1<<endl;
-	//cout<<"theta2 = "<<theta2<<endl;
-	//cout<<"Xi = "<<Xi<<endl;
-	//listaAliquotas[ 0 ] = Xi;
-	//cout<<"X1= "<<listaAliquotas[ 0 ]<<endl;
+	if (listaAliquotas[ 0 ] < 0.0010) {
+		listaAliquotas[ 0 ] = 0.0010;
+    } else if (listaAliquotas[ 0 ] > 0.0020) {
+			listaAliquotas[ 0 ] = 0.0020;
+	}
 
-	//if ( (listaAliquotas[ 0 ] <= 0.0010) && (listaAliquotas[ 0 ] >= 0.0020)) {
-	//	cout<<"X1 não atende"<<endl;
-	//	listaAliquotas[ 0 ] = Xi;
-	//}	
-	if ( (listaAliquotas[ 0 ] <= 0.0010) && (listaAliquotas[ 0 ] >= 0.0020)) {
-		//cout<<"X1 não atende"<<endl;
-		listaAliquotas[ 0 ] = Xi;
-		interval = 20 - 10;
-		randomValue = rng.randInt(interval);
-		randomValueDouble = 10 + randomValue;
-		randomValueDouble = randomValueDouble/10000.0;
-		if(randomValueDouble > listaAliquotas[ 1 ] )
-		{
-			listaAliquotas[ 0 ] = randomValueDouble;
-		}
-		else 
-		{
-			listaAliquotas[ 0 ] = interval/1000.0;
-		}	
-		//cout<<"X1" <<" = "<<listaAliquotas[0]<<endl;
-    }
-	 
-	//cout<<"=== Aliquotas ==="<<endl;
-	//cout<<"X1 = "<<listaAliquotas[ 0 ]<<endl;
+
+	// cout<<"=== Aliquotas ==="<<endl;
+	// cout<<"X1 = "<<listaAliquotas[ 0 ]<<endl;
 	for(int i=1; i < quantidadeAliquotas; i++) {
 		listaAliquotas[i] = listaAliquotas[ i-1 ] * pow( EulerConstant,  theta2 * Xi);
-		//cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+		// cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
 	}
 
 	if ( listaAliquotas[ quantidadeAliquotas -1 ] > 0.0140 ) {
-		// X8 deve ser menor ou igual a 0.0140
-		//cout<<"X8 maior que 0.0140"<<endl;
-		interval = 14;
-		//randomValue = rng.randInt(interval);
-		//randomValueDouble = randomValue;
-		//randomValueDouble = randomValueDouble/1000.0;
-		if(interval/1000.0 > listaAliquotas[ quantidadeAliquotas -2 ] )
-		{
-			listaAliquotas[ quantidadeAliquotas -1 ] = interval/1000.0;
-		}
-		else 
-		{
-			listaAliquotas[ quantidadeAliquotas -1 ] = interval/1000.0;
-		}	
-		//cout<<"X"<<quantidadeAliquotas <<" = "<<listaAliquotas[quantidadeAliquotas -1]<<endl;
+		listaAliquotas[ quantidadeAliquotas -1 ] = 0.0140;
 	}
+
+
+	// cout<<"=== Aliquotas ==="<<endl;
+	// for(int i=0; i < quantidadeAliquotas; i++) {
+	//  cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+	// }
+
+
+	// cout<<"Xi = "<<Xi<<endl;
+	// cout<<"theta1 = "<<theta1<<endl;
+	// cout<<"theta2 = "<<theta2<<endl;
 	
 	for(int i=0; i<listaValorVenal.size(); i++) {
 		fitness = fitness + ( listaValorVenal[ i ] * listaAliquotas[ i ] );
+		// cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
 	}
 
 
-
-	//cout<<"\n=== Dados ==="<<endl;
-	cout<<";"<<theta1<<";"<<theta2<<";"<<Xi<<endl;
-	for(int i=0; i < quantidadeAliquotas; i++) {
-		cout<<";"<<listaAliquotas[i];
+    bool teste = true;
+	for(int i=0; i < quantidadeAliquotas-1; i++) {
+		if(listaAliquotas[i] > listaAliquotas[i + 1]) {
+			// cout<<"Entrou no if de restrição"<<endl;
+			// cout<<listaAliquotas[i] <<" > "<< listaAliquotas[i + 1]<<endl;
+			teste = false;
+			break;
+		}
 	}
 
-	/*
-	Desenvolve a lógica para calcular segundo o modelo matemático
-	*/
-
+	verificacao = teste;
+	
 	return fitness;
 }
 
 // Runs in \Theta(n \log n): // Exemplo consultado em brkga API
-double SampleDecoder::decode(std::vector< double >& chromosome) const {
+double SampleDecoder::decode(std::vector< double > &chromosome) const {
 	double myFitness = 0.0;
-	double penalidade = valorTotalIptu*0.15; // Penalidade de 15% relativo ao valor total do IPTU
-	myFitness = construirSolucao(chromosome);
+	double taxa = 100.0;
+	double penalidade = (valorTotalIptu*taxa)/100.0; // Penalidade de 50% relativo ao valor total do IPTU
+	bool verificacao = false;
 
-	cout<<";"<<std::setprecision(21)<<valorTotalIptu<<";"<<std::setprecision(21)<<myFitness<<endl;
+	// cout<<"\n\n\n=== Decode ==="<<endl;
+
+
+	myFitness = construirSolucao(verificacao, chromosome);
 	
-	if (myFitness < valorTotalIptu) {
-	 	myFitness = myFitness - penalidade;
-	} 
+	// cout<<std::setprecision(21)<<myFitness<<endl;
+	// cout<<"myFitness      = "<<std::setprecision(12)<<myFitness<<endl;
+	// cout<<"valorTotalIptu = "<<std::setprecision(12)<<valorTotalIptu<<endl;
+	// cout<<"penalidade = "<<std::setprecision(12)<<penalidade<<endl;
+
+	// if (myFitness> valorTotalIptu)
+	//  cout<<"myFitness maior"<<endl;
 	
+
+	// cout<<"Verificacao "<<verificacao<<endl;
+	// string msg = (verificacao==true)? "verdadeiro":"falso";
+	// cout<<"Verificacao: "<<msg<<endl;
+
+	// cout<<"Penalidade "<<std::setprecision(21)<<penalidade<<endl;
+
+
+	if (verificacao == false) {
+		//cout<<"Entrou no if de restrição decode"<<endl;
+		//cout<<verificacao<<endl;
+		//cout<<std::setprecision(21)<<myFitness<<endl;
+		penalidade = (myFitness*75)/100.0;
+		myFitness = myFitness - penalidade;
+		//cout<<std::setprecision(21)<<myFitness<<endl;
+
+		// * cout<<"penalidade = "<<std::setprecision(12)<<penalidade<<endl;
+		// * cout<<"myFitness depois da penalidade   = "<<std::setprecision(12)<<myFitness<<endl;
+	}
+
 	myFitness = myFitness * -1.0;
+
+	// * cout<<"\n\n\n";
 
 	return myFitness;
 }
 
+
+void SampleDecoder::verificarSolucao(std::vector< double > &chromosome, int execucao) const {
+	double fitness = 0, valortotalvenal, readleDouble = 0;
+	double theta1, theta2; // parâmetros usados pelos modelo e obtidos pela leitura do cromossomo
+	double Xi; 
+	double listaAliquotas[quantidadeAliquotas];
+	// randInt( const uint32 n ); // integer in [0,n] for n < 2^32
+	int randomValue, interval;
+	double randomValueDouble;
+
+
+	bool verificacao = false;
+
+
+
+	Xi = chromosome[0];
+	theta1 = chromosome[1]; // theta1 deve ser maior ou igual a 0.00042 e menor ou igual a 0.00098
+	theta2 = chromosome[2]; // theta2 deve ser maior ou igual a 0.26670 e menor ou igual a 0.62230
+
+	//cout<<"\n\n\n=== Construir Solucao ==="<<endl;
+
+	//cout<<"EulerConstant = "<<EulerConstant<<endl;
+
+	//cout<<"Valores originais"<<endl;
+	//cout<<theta1<<";"<<theta2<<";"<<Xi<<endl;
+
+
+    // theta1 deve ser maior ou igual a 0.00042 e menor ou igual a 0.00098
+	if ( (theta1 >= 0.42) && (theta1 <= 0.98) ) {
+		//cout<<"Entrou if de theta1"<<endl;
+		theta1 = theta1/1000.0;
+	} else if (theta1 < 0.42) {
+			theta1 = 0.42/1000.0;
+	} else if (theta1 > 0.98) {
+			theta1 = 0.98/1000.0;
+	}
+	
+	
+	// theta2 deve ser maior ou igual a 0.26670 e menor ou igual a 0.62230
+	if (theta2 < 0.26670) {
+		theta2 = 0.26670;
+	} else if (theta2 > 0.62230) {
+			theta2 = 0.62230;
+	}
+
+
+	// X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
+	// if ( (Xi == 1) && (Xi <= 1)) {
+	// 	Xi = 1;
+	// } else {        
+	// 	Xi = 1;
+	// }	
+
+	// Aqui!!! Xi = 1;
+
+
+	// X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
+	listaAliquotas[ 0 ] = theta1 * pow(EulerConstant, theta2 * Xi); // X1 deve ser maior ou igual a 0.0010 e menor ou igual a 0.0020
+
+
+	// if ( (listaAliquotas[ 0 ] < 0.0010) || (listaAliquotas[ 0 ] > 0.0020)) {
+	// 	cout<<"X1 não atende"<<endl;
+	// 	interval = 20 - 10;
+	// 	randomValue = rng.randInt(interval);
+	// 	randomValueDouble = 10 + randomValue;
+	// 	randomValueDouble = randomValueDouble/10000.0;
+	// 	listaAliquotas[ 0 ] = randomValueDouble;
+	// 	cout<<"X1" <<" = "<<listaAliquotas[0]<<endl;
+    // } 
+
+	if (listaAliquotas[ 0 ] < 0.0010) {
+		listaAliquotas[ 0 ] = 0.0010;
+    } else if (listaAliquotas[ 0 ] > 0.0020) {
+			listaAliquotas[ 0 ] = 0.0020;
+	}
+
+
+	// cout<<"=== Aliquotas ==="<<endl;
+	// cout<<"X1 = "<<listaAliquotas[ 0 ]<<endl;
+	for(int i=1; i < quantidadeAliquotas; i++) {
+		listaAliquotas[i] = listaAliquotas[ i-1 ] * pow( EulerConstant,  theta2 * Xi);
+		// cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+	}
+
+	if ( listaAliquotas[ quantidadeAliquotas -1 ] > 0.0140 ) {
+		listaAliquotas[ quantidadeAliquotas -1 ] = 0.0140;
+	}
+
+
+	// cout<<"=== Aliquotas ==="<<endl;
+	// for(int i=0; i < quantidadeAliquotas; i++) {
+	//  cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+	// }
+
+
+	// cout<<"Xi = "<<Xi<<endl;
+	// cout<<"theta1 = "<<theta1<<endl;
+	// cout<<"theta2 = "<<theta2<<endl;
+	
+	for(int i=0; i<listaValorVenal.size(); i++) {
+		fitness = fitness + ( listaValorVenal[ i ] * listaAliquotas[ i ] );
+		// cout<<"X"<<i+1<<" = "<<listaAliquotas[i]<<endl;
+	}
+
+
+    bool teste = true;
+	for(int i=0; i < quantidadeAliquotas-1; i++) {
+		if(listaAliquotas[i] > listaAliquotas[i + 1]) {
+
+			// cout<<"Entrou no if de restrição"<<endl;
+			// cout<<listaAliquotas[i] <<" > "<< listaAliquotas[i + 1]<<endl;
+			teste = false;
+			break;
+		}
+	}
+
+
+
+	verificacao = teste;
+
+
+	double penalidade = 0.0;
+
+	if(verificacao == false)
+	{
+		//cout<<"Entrou no if de restrição decode"<<endl;
+		//cout<<verificacao<<endl;
+		//cout<<std::setprecision(21)<<fitness<<endl;
+		penalidade = (fitness*75)/100.0;
+		fitness = fitness - penalidade;
+		//cout<<std::setprecision(21)<<fitness<<endl;
+
+		// * cout<<"penalidade = "<<std::setprecision(12)<<penalidade<<endl;
+		// * cout<<"fitness depois da penalidade   = "<<std::setprecision(12)<<fitness<<endl;
+	}
+
+
+
+	ofstream dataFileWrite;
+	string ArquivoChecagemSolucao = "resultados/checagem-solucao.txt";
+	
+	dataFileWrite.open(ArquivoChecagemSolucao.c_str(), std::ofstream::out | std::ofstream::app);
+
+	if(!dataFileWrite.is_open()) {
+	     cout<<"Não foi possivel abrir o arquivo dataFileWrite!: "<<ArquivoChecagemSolucao<<endl;
+	     dataFileWrite.clear();
+	     exit(1);
+	}
+
+	// cout<<std::setprecision(21)<<fitness<<endl;
+
+	dataFileWrite<<execucao+1<<"  "<<std::setprecision(21)<<fitness<<" "<<theta1<<"  "<<theta2<<"  "<<Xi<<"  "<<listaAliquotas[0]<<"  "<<listaAliquotas[1]<<"  "<<listaAliquotas[2]<<"  "<<listaAliquotas[3]<<"  "<<listaAliquotas[4]<<"  "<<listaAliquotas[5]<<"  "<<listaAliquotas[6]<<"  "<<listaAliquotas[7]<<"  "<<verificacao<<"\n";
+	
+	dataFileWrite.clear();
+	dataFileWrite.close();
+}
+
+
 // primeira sem penalidade - depois com penalidade
+// Penalidade 

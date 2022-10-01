@@ -23,10 +23,9 @@
 #include <algorithm>
 #include <fstream>
 #include "SampleDecoder.h"
-
+#include "Structures.h"
+#include "Utility.h"
 #include "MTRand.h"
-
-// #include "Population.h"
 
 using namespace std;
 
@@ -54,7 +53,7 @@ class SampleDecoder {
 		
 
 	public:
-
+	
 		SampleDecoder(string _fileName);
 		~SampleDecoder();
 
@@ -63,12 +62,14 @@ class SampleDecoder {
 		double getSeed();
 
 		// double construirSolucao(std::vector< double > &chromosome,vector< unsigned > &permutation) const;
-		double construirSolucao(std::vector< double > &chromosome) const;
+		double construirSolucao(bool &verificacao, std::vector< double > &chromosome) const;
 
-		double decode(std::vector< double >& chromosome) const;
+		double decode(std::vector< double > &chromosome) const;
 
 		void printMatrix(vector< vector<double> > _matrix);
 		
+		void verificarSolucao(std::vector< double > & chromosome, int execucao) const;
+
 };
 
 #endif
